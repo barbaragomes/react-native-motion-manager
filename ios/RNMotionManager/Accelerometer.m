@@ -59,20 +59,18 @@ RCT_EXPORT_METHOD(setAccelerometerUpdateInterval:(double) interval) {
 
 RCT_EXPORT_METHOD(getAccelerometerUpdateInterval:(nonnull RCTResponseSenderBlock) cb) {
   double interval = self.motionManager.accelerometerUpdateInterval;
-  NSLog(@"getAccelerometerUpdateInterval: %f", interval);
+  
   cb(@[[NSNull null], [NSNumber numberWithDouble:interval]]);
 }
 
 RCT_EXPORT_METHOD(getAccelerometerData:(nonnull RCTResponseSenderBlock) cb) {
   CMAccelerometerData* accelerometerData = self.motionManager.accelerometerData;
-    
-  NSLog(@"getAccelerometerData: %f, %f, %f, %f", accelerometerData.acceleration.x, accelerometerData.acceleration.y, accelerometerData.acceleration.z, accelerometerData.timestamp);
-
+   
   cb(@[ [NSNull null], [Accelerometer dictionaryFromAccelerometerData: accelerometerData] ]);
 }
 
 RCT_EXPORT_METHOD(startAccelerometerUpdates:(nonnull RCTResponseSenderBlock) cb) {
-  NSLog(@"startAccelerometerUpdates");
+ 
 
   [self.motionManager startAccelerometerUpdates];
   
@@ -80,8 +78,7 @@ RCT_EXPORT_METHOD(startAccelerometerUpdates:(nonnull RCTResponseSenderBlock) cb)
   [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue mainQueue]
                                            withHandler:^(CMAccelerometerData *accelerometerData, NSError *error)
     {
-     NSLog(@"startAccelerometerUpdates: %f, %f, %f, %f", accelerometerData.acceleration.x, accelerometerData.acceleration.y, accelerometerData.acceleration.z, accelerometerData.timestamp);
-
+    
      [self.bridge.eventDispatcher sendDeviceEventWithName:@"AccelerationData" body:[Accelerometer dictionaryFromAccelerometerData: accelerometerData]];
    }];
     
